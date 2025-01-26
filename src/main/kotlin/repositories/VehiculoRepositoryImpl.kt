@@ -126,13 +126,14 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
         TODO("Not yet implemented")
     }
 
-    override fun maxBy(condition: (Vehiculo) -> Boolean): Number {
+    override fun maxBy(selector: (Vehiculo) -> Number, condition: (Vehiculo) -> Boolean): Number {
         TODO("Not yet implemented")
     }
 
-    override fun minBy(condition: (Vehiculo) -> Boolean): Number {
+    override fun minBy(selector: (Vehiculo) -> Number, condition: (Vehiculo) -> Boolean): Number {
         TODO("Not yet implemented")
     }
+
 
     override fun findAll(): Array<Vehiculo> {
         TODO("Not yet implemented")
