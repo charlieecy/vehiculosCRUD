@@ -1,8 +1,10 @@
 package dev.carloscy.repositories
 
+import dev.carloscy.COCHE_ELECTRICO
 import dev.carloscy.COCHE_GASOLINA
-import dev.carloscy.models.CocheGasolina
-import dev.carloscy.models.Vehiculo
+import dev.carloscy.COCHE_HIBRIDO
+import dev.carloscy.MOTOCICLETA
+import dev.carloscy.models.*
 import org.lighthousegames.logging.logging
 
 class VehiculoRepositoryImpl: IVehiculoRepository {
@@ -10,25 +12,86 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
     private var maxVehiculos: Int = 10
     private var vehiculos: Array<Vehiculo?> = arrayOfNulls<Vehiculo>(maxVehiculos)
 
-    override fun create(): Vehiculo {
+    override fun create(): Vehiculo? {
         logger.debug { "Creando vehículo" }
-        var tipoVehiculo: Int? = preguntartipoVehiculo()
+        var tipoVehiculo: Int = preguntartipoVehiculo()
         var matricula: String = preguntarMatricula()
         var kms: Int = preguntarKms()
         var anoMatriculacion: Int = preguntarAnoMatriculación()
 
+
         when (tipoVehiculo) {
             COCHE_GASOLINA -> {
-                var vehiculo: CocheGasolina = CocheGasolina(matricula = matricula, kms = kms, anoMatriculacion = anoMatriculacion)
+                val consumo = preguntarConsumo()
+                val cocheGasolina: CocheGasolina = CocheGasolina(matricula = matricula, kms = kms, anoMatriculacion = anoMatriculacion, consumo = consumo)
+                logger.info { "Coche de gasolina creado" }
+                return cocheGasolina
+            }
+            COCHE_ELECTRICO -> {
+                val tiempoCarga = preguntarTiempoCarga()
+                val cocheElectrico: CocheElectrico = CocheElectrico(matricula = matricula, kms = kms, anoMatriculacion = anoMatriculacion, tiempoCarga = tiempoCarga)
+                logger.info { "Coche eléctrico creado" }
+                return cocheElectrico
+            }
+            COCHE_HIBRIDO -> {
+                val consumo = preguntarConsumo()
+                val tiempoCarga = preguntarTiempoCarga()
+                val cocheHibrido: CocheHibrido = CocheHibrido(matricula = matricula, kms = kms, anoMatriculacion = anoMatriculacion, consumo = consumo, tiempoCarga = tiempoCarga)
+                logger.info { "Coche híbrido creado" }
+                return cocheHibrido
+            }
+            MOTOCICLETA -> {
+                val cilindrada = preguntarCilindrada()
+                val motocicleta: Motocicleta = Motocicleta(matricula = matricula, kms = kms, anoMatriculacion = anoMatriculacion, cilindrada = cilindrada)
+                logger.info { "Motocicleta creada" }
+                return motocicleta
             }
         }
 
-
+    return null
     }
 
-    private fun preguntartipoVehiculo(): Int? {
+    override fun save(item: Vehiculo): Vehiculo {
+        TODO("Not yet implemented")
+    }
+
+    private fun preguntarTiempoCarga (): Double {
+        logger.debug { "Preguntando tiempo de carga al usuario" }
+        var inputOk: Boolean = false
+        var tiempoCarga: Double
+
+        do {
+            println("¿Cuál es el tiempo de carga del vehículo?")
+            tiempoCarga = readln().toDoubleOrNull() ?: -1.0
+
+            if (tiempoCarga >= 0.0) {
+                inputOk = true
+            }
+        }while (!inputOk)
+
+        return tiempoCarga
+    }
+
+    private fun preguntarConsumo (): Double {
+        logger.debug { "Preguntando consumo al usuario" }
+        var inputOk: Boolean = false
+        var consumo: Double
+
+        do {
+            println("¿Qué consumo tiene el vehículo?")
+            consumo = readln().toDoubleOrNull() ?: -1.0
+
+            if (consumo >= 0.0) {
+                inputOk = true
+            }
+        }while (!inputOk)
+
+        return consumo
+    }
+
+    private fun preguntartipoVehiculo(): Int {
         logger.debug { "Preguntando tipo de vehículo al usuario" }
-        var tipoVehiculo: Int? = null
+        var tipoVehiculo: Int
         var inputOk: Boolean = false
 
         do {
@@ -38,7 +101,7 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
             println("3. Coche híbrido")
             println("4. Motocicleta")
 
-            tipoVehiculo = readln().toIntOrNull()
+            tipoVehiculo = readln().toIntOrNull() ?: -1
 
             if (tipoVehiculo in (1..4)) {
                 inputOk = true
@@ -54,7 +117,7 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
         var ano: Int
 
         do {
-            println("¿Cuántos kms tiene el vehículo?")
+            println("¿Cuál es el año de matriculación del vehículo?")
             ano = readln().toIntOrNull() ?: -1
             if (ano < 1950) {
                 println("Por favor, introduzca un año de matriculación válido.")
@@ -64,6 +127,24 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
         } while (!userInput)
 
         return ano
+    }
+
+    private fun preguntarCilindrada (): Int {
+        logger.debug { "Preguntando cilindrada al usuario" }
+        var userInput: Boolean = false
+        var cilindrada: Int
+
+        do {
+            println("¿Cuál es la cilindrada del vehículo?")
+            cilindrada = readln().toIntOrNull() ?: -1
+            if (cilindrada < 0) {
+                println("Por favor, introduzca un número de cc válido.")
+            } else {
+                userInput = true
+            }
+        } while (!userInput)
+
+        return cilindrada
     }
 
     private fun preguntarKms (): Int {

@@ -11,6 +11,12 @@ fun main() {
 
     val repository = VehiculoRepositoryImpl()
 
-    repository.preguntarMatricula()
+    val v1 = repository.create()
+
+    println(v1)
+
+    val v2 = repository.create()
+
+    println(v2)
 
 }

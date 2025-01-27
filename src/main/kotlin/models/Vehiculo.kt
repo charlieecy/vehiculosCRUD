@@ -5,12 +5,11 @@ import java.time.LocalDateTime
 
 val logger = logging()
 
-abstract class Vehiculo (
-    private val id: Int = generarID(),
+abstract class Vehiculo(
+    val id: Int = generarID(),
     val matricula: String,
     var kms: Int,
     var anoMatriculacion: Int,
-    var motor: IMotor,
     var createdAt: LocalDateTime = LocalDateTime.now(),
     var updatedAt: LocalDateTime = LocalDateTime.now(),
     var isActive: Boolean = true
@@ -24,9 +23,5 @@ abstract class Vehiculo (
             logger.info { "ID: $newId" }
             return newId
         }
-    }
-
-    override fun toString(): String {
-        return "( id = $id, matricula = $matricula, kms = $kms, anoMatriculacion = $anoMatriculacion, motor = ${motor}, createdAt = $createdAt, updatedAt = $updatedAt, isActive = $isActive )"
     }
 }

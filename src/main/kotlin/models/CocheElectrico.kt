@@ -1,16 +1,13 @@
 package dev.carloscy.models
 
-import java.time.LocalDateTime
-
 class CocheElectrico (
-    id: Int,
     matricula: String,
     kms: Int,
     anoMatriculacion: Int,
-    motor: IMotorElectrico,
-    createdAt: LocalDateTime,
-    updatedAt: LocalDateTime,
-    isActive: Boolean,
+    override var tiempoCarga: Double
+) : Vehiculo (matricula = matricula, kms = kms, anoMatriculacion = anoMatriculacion), IMotorElectrico {
 
-) : Vehiculo (id, matricula, kms, anoMatriculacion, motor, createdAt, updatedAt, isActive) {
+    override fun toString(): String {
+        return "( id = $id, matricula = $matricula, kms = $kms, anoMatriculacion = $anoMatriculacion, tiempo de carga = $tiempoCarga, createdAt = $createdAt, updatedAt = $updatedAt, isActive = $isActive )"
+    }
 }
