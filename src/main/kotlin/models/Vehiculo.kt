@@ -6,16 +6,18 @@ import java.time.LocalDateTime
 val logger = logging()
 
 abstract class Vehiculo(
-    val id: Int = generarID(),
+    val id: Int = NEW_ID,
     val matricula: String,
     var kms: Int,
     var anoMatriculacion: Int,
     var createdAt: LocalDateTime = LocalDateTime.now(),
     var updatedAt: LocalDateTime = LocalDateTime.now(),
-    var isActive: Boolean = true
+    var isDeleted: Boolean = false
 ){
     companion object {
-        private var lastID: Int = 0
+        private var NEW_ID: Int = 0
+
+        /*
         private fun generarID (): Int {
             logger.debug { "Generando nuevo ID" }
             lastID++
@@ -23,5 +25,7 @@ abstract class Vehiculo(
             logger.info { "ID: $newId" }
             return newId
         }
+
+         */
     }
 }

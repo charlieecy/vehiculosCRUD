@@ -8,6 +8,6 @@ class CocheGasolina (
 ) : Vehiculo (matricula = matricula, kms = kms, anoMatriculacion = anoMatriculacion), IMotorGasolina {
 
     override fun toString(): String {
-        return "( id = $id, matricula = $matricula, kms = $kms, anoMatriculacion = $anoMatriculacion, consumo = $consumo, createdAt = $createdAt, updatedAt = $updatedAt, isActive = $isActive )"
+        return "( ⛽ id = $id, matricula = $matricula, kms = $kms, anoMatriculacion = $anoMatriculacion, consumo = $consumo, createdAt = $createdAt, updatedAt = $updatedAt, isDeleted = $isDeleted )"
     }
 }
