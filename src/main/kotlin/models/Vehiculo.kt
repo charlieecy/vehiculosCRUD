@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 val logger = logging()
 
-abstract class Vehiculo(
+open class Vehiculo(
     val id: Int = NEW_ID,
     val matricula: String,
     var kms: Int,
@@ -14,18 +14,16 @@ abstract class Vehiculo(
     var updatedAt: LocalDateTime = LocalDateTime.now(),
     var isDeleted: Boolean = false
 ){
-    companion object {
+
+    companion object{
         private var NEW_ID: Int = 0
+    }
 
-        /*
-        private fun generarID (): Int {
-            logger.debug { "Generando nuevo ID" }
-            lastID++
-            val newId = lastID
-            logger.info { "ID: $newId" }
-            return newId
-        }
+    fun copy(id: Int, matricula: String, kms: Int, anoMatriculacion: Int, createdAt: LocalDateTime, updatedAt: LocalDateTime, isDeleted: Boolean): Vehiculo {
+            return Vehiculo(id, matricula, kms, anoMatriculacion, createdAt, updatedAt, isDeleted)
+    }
 
-         */
+    override fun toString(): String {
+        return "(id = $id, matricula = $matricula, kms = $kms, anoMatriculacion = $anoMatriculacion, createdAt = $createdAt, updatedAt = $updatedAt, isDeleted = $isDeleted )"
     }
 }

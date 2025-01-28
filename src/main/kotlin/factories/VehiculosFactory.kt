@@ -14,16 +14,16 @@ class VehiculosFactory {
         var segundaLetra: String = arrayOf("B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "V", "W", "X", "Y", "Z").random()
         var terceraLetra: String = arrayOf("B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "V", "W", "X", "Y", "Z").random()
 
-        var matriculaCompleta: String = numeros.toString() + primeraLetra + segundaLetra + terceraLetra
-        var kms: Int = (0..300000).random()
-        var anoMatriculacion: Int = (1950..2025).random()
+        val matriculaCompleta: String = numeros.toString() + primeraLetra + segundaLetra + terceraLetra
+        val kms: Int = (0..300000).random()
+        val anoMatriculacion: Int = (1950..2025).random()
 
         //Propiedades específicas según el tipo de vehículo
-        var consumo: Double = Random.nextDouble(0.0,10.0)
-        var tiempoCarga: Double = Random.nextDouble(0.0,10.0)
-        var cilindrada: Int = (0..1000).random()
+        val consumo: Double = Random.nextDouble(0.0,10.0)
+        val tiempoCarga: Double = Random.nextDouble(0.0,10.0)
+        val cilindrada: Int = (0..1000).random()
 
-        var tipoVehiculo: Int = (0..100).random()
+        val tipoVehiculo: Int = (0..100).random()
         return when (tipoVehiculo) {
             in 0..25 -> {CocheGasolina(matricula = matriculaCompleta, anoMatriculacion = anoMatriculacion, kms = kms, consumo = consumo)}
             in 26..50 -> {CocheElectrico(matricula = matriculaCompleta, anoMatriculacion = anoMatriculacion, kms = kms, tiempoCarga = tiempoCarga)}
