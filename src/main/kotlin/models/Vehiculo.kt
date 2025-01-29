@@ -5,8 +5,18 @@ import java.time.LocalDateTime
 
 val logger = logging()
 
-open class Vehiculo(
-    val id: Int = NEW_ID,
+/**
+ * Clase abstracta que representa a un vehículo, supertipo del resto de clases.
+ * @property id identificador único del vehículo.
+ * @property matricula matrícula del vehículo.
+ * @property kms kilómetros del vehículo.
+ * @property anoMatriculacion año de matriculación del vehículo.
+ * @property createdAt fecha en que se crea el vehículo en la base de datos.
+ * @property updatedAt fecha en que se actualiza el vehículo en la base de datos.
+ * @property isDeleted true si el vehículo ha sido eliminado, false en caso contrario.
+ */
+abstract class Vehiculo(
+    var id: Int = NEW_ID,
     val matricula: String,
     var kms: Int,
     var anoMatriculacion: Int,
@@ -16,14 +26,13 @@ open class Vehiculo(
 ){
 
     companion object{
-        private var NEW_ID: Int = 0
+        private var NEW_ID: Int = 1
     }
 
-    fun copy(id: Int, matricula: String, kms: Int, anoMatriculacion: Int, createdAt: LocalDateTime, updatedAt: LocalDateTime, isDeleted: Boolean): Vehiculo {
-            return Vehiculo(id, matricula, kms, anoMatriculacion, createdAt, updatedAt, isDeleted)
-    }
+    abstract fun copy(): Vehiculo
 
     override fun toString(): String {
+        logger.debug { "Usando el toString() de la clase Vehiculo" }
         return "(id = $id, matricula = $matricula, kms = $kms, anoMatriculacion = $anoMatriculacion, createdAt = $createdAt, updatedAt = $updatedAt, isDeleted = $isDeleted )"
     }
 }

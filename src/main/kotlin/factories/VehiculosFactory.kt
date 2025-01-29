@@ -1,10 +1,16 @@
 package dev.carloscy.factories
 
 import dev.carloscy.models.*
-import kotlin.random.Random
 
+/**
+ * Clase que representa una factoría de vehículos, generados de forma aleatoria.
+ */
 class VehiculosFactory {
 
+    /**
+     * Genera un vehículo con valores y subtipo aleatorios.
+     * @return el vehículo generado.
+     */
     fun vehiculoRandom () : Vehiculo {
         logger.debug { "Generando vehículo aleatorio" }
 
@@ -19,8 +25,8 @@ class VehiculosFactory {
         val anoMatriculacion: Int = (1950..2025).random()
 
         //Propiedades específicas según el tipo de vehículo
-        val consumo: Double = Random.nextDouble(0.0,10.0)
-        val tiempoCarga: Double = Random.nextDouble(0.0,10.0)
+        val consumo: Int = (0..10).random()
+        val tiempoCarga: Int = (0..10).random()
         val cilindrada: Int = (0..1000).random()
 
         val tipoVehiculo: Int = (0..100).random()

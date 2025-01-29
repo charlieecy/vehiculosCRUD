@@ -1,8 +1,12 @@
 package dev.carloscy.models
 
+/**
+ * Interfaz que representa el motor de un vehículo eléctrico.
+ * @property tiempoCarga tiempo de carga del motor.
+ */
 interface IMotorElectrico: IMotor {
 
-    var tiempoCarga: Double
+    var tiempoCarga: Int
 
     override fun arrancar() {
         println("Arrancando motor eléctrico.")

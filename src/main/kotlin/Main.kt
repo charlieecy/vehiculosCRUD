@@ -1,8 +1,9 @@
 package dev.carloscy
 
+import com.github.ajalt.mordant.rendering.TextColors
+import dev.carloscy.extensions.ModoOrdenamiento
 import dev.carloscy.factories.VehiculosFactory
-import dev.carloscy.models.CocheGasolina
-import dev.carloscy.models.IMotorGasolina
+import dev.carloscy.models.*
 import dev.carloscy.repositories.VehiculoRepositoryImpl
 
 fun main() {
@@ -34,37 +35,98 @@ fun main() {
     repository.save(v9)
     repository.save(v10)
 
-    //Creamos otro vehículo para ver si funciona la redimensión en la función save
+    println(TextColors.blue("Creamos otro vehículo con el array lleno para que se redimensione"))
     val v11 = factory.vehiculoRandom()
     repository.save(v11)
 
-    //Imprimimos todos los vehículos
+    println(TextColors.blue("Imprimimos todos los vehículos"))
     repository.findAll().forEach { println(it) }
 
-    //Buscamos por ID
-    //EXISTE, imprime el vehículo
+    println()
+
+    println(TextColors.blue("Buscamos por ID"))
+    println(TextColors.blue("ID: 3 (existe)"))
     println(repository.findById(3))
-    //NO EXISTE, imprime null
+
+    println(TextColors.blue("ID: 13 (no existe)"))
     println(repository.findById(13))
 
-    //Actualizamos un vehículo
-    //EXISTE, imprimimos para ver si se ha actualizado
+    println()
+
+    println(TextColors.blue("Actualizamos un vehículo"))
+    println(TextColors.blue("ID: 1 (existe)"))
     repository.findById(1)?.let { repository.update(1, it) }
     println(repository.findById(1))
-    //NO existe, al no encontrarlo no se debe ejecutar el update
+
+    println(TextColors.blue("ID: 13 (no existe), al no encontrarlo no se ejecuta update()"))
     repository.findById(13)?.let { repository.update(13, it) }
 
-    //Borrado lógico de un vehículo
-    //EXISTE, imprimimos para ver si se ha borrado
+    println()
+
+    println(TextColors.blue("Borramos un vehículo"))
+    println(TextColors.blue("ID: 4 (existe)"))
     repository.delete(4)
     println(repository.findById(4))
-    //NO EXISTE, el logger debería avisarnos de que no ha podido borrarse
+    println(TextColors.blue("ID: 13 (no existe)"))
     repository.delete(13)
 
-    //Filtramos por una condicion
-    //Aquellos vehículos cuyo año de matriculación sea posterior a 1980
+    println()
+
+    println(TextColors.blue("Vehículos con fecha de matriculación > 1980"))
     repository.findBy{it.anoMatriculacion > 1980}.forEach { println(it) }
-    //Aquellos coches de gasolina
+
+    println()
+
+    println(TextColors.blue("Coches de gasolina"))
     repository.findBy{it is CocheGasolina}.forEach { println(it) }
-    repository.findBy{it is IMotorGasolina}.forEach { println(it) }
+
+    println()
+
+    println(TextColors.blue("Coches híbridos"))
+    repository.findBy{it is CocheHibrido}.forEach { println(it) }
+
+    println()
+
+    println(TextColors.blue("Coches eléctricos"))
+    repository.findBy{it is CocheElectrico}.forEach { println(it) }
+
+    println()
+
+    println(TextColors.blue("Motocicletas"))
+    repository.findBy{it is Motocicleta}.forEach { println(it) }
+
+    println()
+
+    println(TextColors.blue("Motocicleta más nueva"))
+    println(repository.maxBy ({ it.anoMatriculacion }, {it is Motocicleta}))
+
+    println()
+
+    println(TextColors.blue("Vehículo con el máximo de kms"))
+    println(repository.maxBy ({ it.kms }, {true}))
+
+    println()
+
+    println(TextColors.blue("Vehículo más antiguo"))
+    println(repository.minBy ({ it.anoMatriculacion }, {true}))
+
+    println()
+
+    println(TextColors.blue("Nº de vehículos con más de 200.000 kms "))
+    println(repository.countby({it.kms > 200000}))
+
+    println()
+
+    println(TextColors.blue("Vehículos ordenados por kms en orden asdcendente"))
+    repository.sortedBy(){it.kms}.forEach { println(it) }
+
+    println()
+
+    println(TextColors.blue("Vehículos ordenados por año de matriculación en orden descendente"))
+    repository.sortedBy(ModoOrdenamiento.DESCENDENTE) {it.anoMatriculacion}.forEach { println(it) }
+
+    println()
+
+    println(TextColors.blue("Coches híbridos más antiguos de 2000 ordenados de forma ascendente"))
+    repository.findBy{it is CocheHibrido && it.anoMatriculacion < 2000}.sortedBy { it.anoMatriculacion }.forEach { println(it) }
 }

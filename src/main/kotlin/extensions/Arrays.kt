@@ -1,6 +1,12 @@
-package dev.carloscy.Arrays
+package dev.carloscy.extensions
 
+import dev.carloscy.models.Vehiculo
 
+/**
+ * Cuenta el número de elementos de un array que cumplen una condición.
+ * @param predicate condición a cumplir.
+ * @return el número de elementos que la cumplen.
+ */
 inline fun <T> Array<T?>.countBy(predicate: (T) -> Boolean = { true }): Int { //contar en función de si cada elemento cumple el predicado, devuelve el número de elementos que lo cumplen
     var count = 0 // recuento, variable que devuelve
     for (element in this) {  //recorremos el array (this)
@@ -11,10 +17,14 @@ inline fun <T> Array<T?>.countBy(predicate: (T) -> Boolean = { true }): Int { //
     return count
 }
 
-
+/**
+ * Filtra los elementos de un array que cumplen una condición.
+ * @param predicate condición a cumplir.
+ * @return un array que contiene solo los elementos que cumplen la condición.
+ */
 inline fun <reified T> Array<T?>.filterBy(predicate: (T) -> Boolean): Array<T> { //Queremos filtrar los elementos de un array que cumplen una condición
     val result =    //Creamos el array que después devolveremos con los elementos que cumplen el predicado. Su tamaño es el recuento de aquellos que lo cumplen.
-        Array<T>(this.countBy(predicate)) { null as T }
+        Array<T?>(this.countBy(predicate)) { null }
     var index = 0
     for (item in this) {    //Recorremos el array original
         if (item != null && predicate(item)) {
@@ -22,10 +32,13 @@ inline fun <reified T> Array<T?>.filterBy(predicate: (T) -> Boolean): Array<T> {
             index++
         }
     }
-    return result
+    return result as Array<T>
 }
 
-
+/**
+ * Recorre un array y realiza una acción para cada uno de sus elementos.
+ * @param action acción a realizar.
+ */
 fun <T> Array<T?>.forEach(action: (T) -> Unit) {    //action es la función lambda
     for (item in this) {    //recorremos el array
         if (item != null) { //si cada elemento (item) es distino de null
@@ -34,7 +47,11 @@ fun <T> Array<T?>.forEach(action: (T) -> Unit) {    //action es la función lamb
     }
 }
 
-
+/**
+ * Busca el índice del elemento de un array que cumpla una condición.
+ * @param condition condición a cumplir.
+ * @return íncide del primer elemento de un array que cumpla una condición, en caso de haber alguno. Si no, devuelve -1.
+ */
 fun <T> Array<T?>.indexOf(condition: (T?) -> Boolean): Int {    //buscamos el índice de la posición del array que cumpla la condición
     for (index in this.indices) {   //recorremos los índices del array (this)
         if (condition(this[index])) { //si una posición cumple la condición,
@@ -44,7 +61,11 @@ fun <T> Array<T?>.indexOf(condition: (T?) -> Boolean): Int {    //buscamos el í
     return -1   // si ninguna posición cumple la condición, devolvemos -1
 }
 
-
+/**
+ * Calcula la media de los elementos de un array que cumplen una condición.
+ * @param predicate condición a cumplir.
+ * @return la media.
+ */
 fun <T> Array<T?>.averageBy(predicate: (T) -> Boolean): Double {  //queremos obtener la media en función de los elementos que cumplen un predicado
     var count = 0   //variable que representa el número de elementos que lo cumplen
     var total = 0.0 //numerador de la operación para obtener la media
@@ -57,18 +78,11 @@ fun <T> Array<T?>.averageBy(predicate: (T) -> Boolean): Double {  //queremos obt
     return if (count == 0) 0.0 else total / count
 }
 
-
-fun <T> Array<T?>.sumBy(predicate: (T) -> Boolean): Double { //Queremos obtener la suma de los elementos que cumplan el predicado
-    var total = 0.0     //creamos la variable que devolveremos como resultado
-    for (element in this) { //recorremos el array (this)
-        if (element != null && predicate(element)) {    //si el elemento es distinto de null y cumple el predicado, le sumamos su valor al total
-            total += element.toString().toDouble()
-        }
-    }
-    return total
-}
-
-
+/**
+ * Busca el primer elemento de un array que cumpla una condición.
+ * @param predicate condición a cumplir.
+ * @return El elemento que cumple la condición en caso de haberlo. Si no, null.
+ */
 fun <T> Array<T?>.firstOrNull(predicate: (T) -> Boolean = { true }): T? {   //buscamos el primer elemento del array que cumpla el predicado, devolvemos ese elemento o null en caso de no cumplirlo ninguno
     for (element in this) { //recorremos el array (this)
         if (element != null && predicate(element)) {    //si la posición es distinto de null y cumple el predicado, devolvemos ese elemento
@@ -78,21 +92,15 @@ fun <T> Array<T?>.firstOrNull(predicate: (T) -> Boolean = { true }): T? {   //bu
     return null // si ningñun elemento lo cumple, devolvemos null
 }
 
-
-fun <T> Array<T?>.lastOrNull(predicate: (T) -> Boolean = { true }): T? {    //buscamos el último elemento del array que cumpla el predicado, devolvemos ese elemento o null en caso de no cumplirlo ninguno
-    var lastMatch: T? = null    //variable que devolveremos, inicialmente se asigna valor null, a la espera de recorrer el array
-    for (element in this) { //recorremos el array (this)
-        if (element != null && predicate(element)) { //si un elemento es distinto de null y cumple el predicado
-            lastMatch = element //le asignamos el valor a la variable que devolvemos
-        }
-    }
-    return lastMatch
-}
-
-
-fun <T> Array<T?>.maxByOrNull(selector: (T) -> Double, predicate: (T) -> Boolean): T? { //buscamos el máximo de los elementos cuyo valor del selector (propiedad) cumpla el predicado
+/**
+ * Busca el elemento con el valor máximo de un determinado selector y que cumpla una condición.
+ * @param selector propiedad de la que se desea obtener el elemento que contiene el máximo valor.
+ * @param predicate condición a cumplir.
+ * @return el elemento con el valor máximo de aquellos que cumplen la condición. Si ningún elemento la cumple, devuelve null.
+ */
+fun <T> Array<T?>.maxByOrNull(selector: (T) -> Int, predicate: (T) -> Boolean): T? { //buscamos el máximo de los elementos cuyo valor del selector (propiedad) cumpla el predicado
     var maxElement: T? = null   //creamos la variable que devolveremos, inicialmente le asignamos null a la espera de recorrer el array
-    var maxValue: Double? = null    //creamos la variable que almacenará el mayor valor que encontremos en el selector de aquellos elementos que cumplan el predicado
+    var maxValue: Int? = null    //creamos la variable que almacenará el mayor valor que encontremos en el selector de aquellos elementos que cumplan el predicado
     for (element in this) { //recorremos el array
         if (element != null && predicate(element)) {    //si el elemento es distinto de null y cumple el predicado
             val value = selector(element)   //creamos la variable auxiliar para hacer el swap y le asignamos el valor del selector de dicho elemento
@@ -105,10 +113,15 @@ fun <T> Array<T?>.maxByOrNull(selector: (T) -> Double, predicate: (T) -> Boolean
     return maxElement
 }
 
-
-fun <T> Array<T?>.minByOrNull(selector: (T) -> Double, predicate: (T) -> Boolean): T? { //igual funcionamiento que maxByOrNull, pero con el valor mínimo en lugar del máximo
+/**
+ * Busca el elemento con el valor mínimo de un determinado selector y que cumpla una condición.
+ * @param selector propiedad de la que se desea obtener el elemento que contiene el mínimo valor.
+ * @param predicate condición a cumplir.
+ * @return el elemento con el valor mínimo de aquellos que cumplen la condición. Si ningún elemento la cumple, devuelve null.
+ */
+fun <T> Array<T?>.minByOrNull(selector: (T) -> Int, predicate: (T) -> Boolean): T? { //igual funcionamiento que maxByOrNull, pero con el valor mínimo en lugar del máximo
     var minElement: T? = null
-    var minValue: Double? = null
+    var minValue: Int? = null
     for (element in this) {
         if (element != null && predicate(element)) {
             val value = selector(element)
@@ -121,7 +134,12 @@ fun <T> Array<T?>.minByOrNull(selector: (T) -> Double, predicate: (T) -> Boolean
     return minElement
 }
 
-
+/**
+ * Redimensiona un array, pudiendo aumentar o disminuir su tamaño.
+ * @param modo modo de redimensionamiento.
+ * @param maxItems tamaño máximo del array que devolvemos.
+ * @return el array redimensionado.
+ */
 inline fun <reified T> Array<T?>.redimensionar(modo: ModoRedimension, maxItems: Int): Array<T?> { //redimensionamos el array según el modo (ascendente o descendente) y su tamaño (maxItems)
     val nuevoArray = arrayOfNulls<T>(maxItems)  //creamos el array que devolveremos ya redimendionado, con el tamaño que le entra por parámetro y relleno de nulls
     var index = 0   //inicializamos el índice con el que recorremos este nuevo array a 0
@@ -134,12 +152,18 @@ inline fun <reified T> Array<T?>.redimensionar(modo: ModoRedimension, maxItems: 
     return nuevoArray //devolvemos el nuevo array ya redimensionado
 }
 
+/**
+ * Ordena un array en función de un selector y un modo de ordenamiento.
+ * @param mode modo de ordenamiento, puede ser ascendente o descendente.
+ * @param selector propiedad en base a la cual se va a ordenar el array.
+ * @return el array ordenado.
+ */
 inline fun <reified T> Array<T?>.sortedBy(
-    mode: ModoOrdenamiento = ModoOrdenamiento.DESCENDENTE,
-    selector: (T) -> Double
+    mode: ModoOrdenamiento = ModoOrdenamiento.ASCENDENTE,
+    selector: (T) -> Int
 ): Array<T> {
     val result = this.filterBy { true }
-    val compare: (Double, Double) -> Boolean =
+    val compare: (Int, Int) -> Boolean =
         if (mode == ModoOrdenamiento.ASCENDENTE) { a, b -> a > b } else { a, b -> a < b }
 
     for (i in result.indices) {
@@ -152,11 +176,16 @@ inline fun <reified T> Array<T?>.sortedBy(
     return result
 }
 
-
+/**
+ * Enum class que representa las formas de redimensionar el array
+ */
 enum class ModoRedimension {
     AUMENTAR, DISMINUIR
 }
 
+/**
+ * Enum class que representa las formas de ordenar el array
+ */
 enum class ModoOrdenamiento {
     ASCENDENTE, DESCENDENTE
 }
