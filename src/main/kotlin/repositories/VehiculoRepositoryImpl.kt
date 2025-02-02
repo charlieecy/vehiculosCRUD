@@ -7,14 +7,12 @@ import java.time.LocalDateTime
 
 /**
  * Clase que representa un repositorio para gestionar el stock de un concesionario de vehículos.
- * @property maxVehiculos tamaño máximo del array que almacena los vehículos.
- * @property vehiculos array que almacena los vehículos.
- * @property newId id autonumérico que se le asigna a cada vehículo al almacenarlo en el array.
+ * @property vehiculos lista que almacena los vehículos.
+ * @property newId id autonumérico que se le asigna a cada vehículo al almacenarlo en la lista.
  */
 class VehiculoRepositoryImpl: IVehiculoRepository {
     val logger = logging()
-    private var maxVehiculos: Int = 10
-    private var vehiculos: Array<Vehiculo?> = arrayOfNulls<Vehiculo>(maxVehiculos)
+    private var vehiculos: MutableList<Vehiculo> = mutableListOf<Vehiculo>()
     private var newId: Int = 0
 
     /**
@@ -27,16 +25,16 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
     }
 
     /**
-     * Filtra los vehículos de un array que cumplen una condición.
+     * Filtra los vehículos de una lista que cumplen una condición.
      * @param condition condición a cumplir.
-     * @return un array que contiene solo los vehículos que cumplen la condición.
+     * @return una lista que contiene solo los vehículos que cumplen la condición.
      */
-    override fun findBy(condition: (Vehiculo) -> Boolean): Array<Vehiculo> {
+    override fun findBy(condition: (Vehiculo) -> Boolean): List<Vehiculo> {
         return vehiculos.filterBy { condition(it) }
     }
 
     /**
-     * Calcula la media de los vehículos de un array que cumplen una condición.
+     * Calcula la media de los vehículos de una lista que cumplen una condición.
      * @param condition condición a cumplir.
      * @return la media.
      */
@@ -45,7 +43,7 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
     }
 
     /**
-     * Cuenta el número de vehículos de un array que cumplen una condición.
+     * Cuenta el número de vehículos de una lista que cumplen una condición.
      * @param condition condición a cumplir.
      * @return el número de vehículos que la cumplen.
      */
@@ -74,17 +72,17 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
     }
 
     /**
-     * Ordena un array de vehículos en función de un selector y un modo de ordenamiento.
+     * Ordena una lista de vehículos en función de un selector y un modo de ordenamiento.
      * @param mode modo de ordenamiento, puede ser ascendente o descendente.
-     * @param selector propiedad en base a la cual se va a ordenar el array.
-     * @return el array ordenado.
+     * @param selector propiedad en base a la cual se va a ordenar la lista.
+     * @return la lista ordenada.
      */
-    override fun sortedBy(mode: ModoOrdenamiento, selector: (Vehiculo) -> Int): Array<Vehiculo> {
+    override fun sortedBy(mode: ModoOrdenamiento, selector: (Vehiculo) -> Int): List<Vehiculo> {
         return vehiculos.sortedBy(mode, selector)
     }
 
     /**
-     * Guarda un vehículo en el array de vehículos, actualizando su fecha de creación y de actualización.
+     * Guarda un vehículo en la lista de vehículos, actualizando su fecha de creación y de actualización.
      * @return el vehículo guardado.
      */
     override fun save(item: Vehiculo): Vehiculo {
@@ -94,32 +92,24 @@ class VehiculoRepositoryImpl: IVehiculoRepository {
         nuevoVehiculo.createdAt = LocalDateTime.now()
         nuevoVehiculo.updatedAt = LocalDateTime.now()
 
-        var indiceLibre: Int = 0
-        indiceLibre = vehiculos.indexOf {it == null}
+        vehiculos.addLast(nuevoVehiculo)
 
-        if (indiceLibre == -1){
-            logger.info { "Redimensionando array" }
-            vehiculos = vehiculos.redimensionar(modo = ModoRedimension.AUMENTAR, maxItems = vehiculos.size * 2)
-            indiceLibre = vehiculos.indexOf {it == null}
-        }
-
-        vehiculos[indiceLibre] = nuevoVehiculo
         logger.info { " 💚 Vehículo guardado con éxito" }
 
         return nuevoVehiculo
     }
 
     /**
-     * Busca todos los elementos del array de vehículos.
-     * @return el array que contiene todos los vehículos.
+     * Busca todos los elementos de la lista de vehículos.
+     * @return la lista que contiene todos los vehículos.
      */
-    override fun findAll(): Array<Vehiculo> {
+    override fun findAll(): List<Vehiculo> {
         logger.debug { "Obteniendo todos los vehículos" }
         return vehiculos.filterBy { true }
     }
 
     /**
-     * Busca un vehículo en el array en función de su id.
+     * Busca un vehículo en la lista en función de su id.
      * @param id id del vehículo buscado.
      * @return El vehículo con dicha id en caso de existir. En caso contrario, null.
      */

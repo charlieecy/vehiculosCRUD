@@ -15,10 +15,10 @@ class VehiculosFactory {
         logger.debug { "Generando vehículo aleatorio" }
 
         //Propiedades comunes a todos los vehículos
-        var numeros: Int = (0..9999).random()
-        var primeraLetra: String = arrayOf("B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "V", "W", "X", "Y", "Z").random()
-        var segundaLetra: String = arrayOf("B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "V", "W", "X", "Y", "Z").random()
-        var terceraLetra: String = arrayOf("B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "V", "W", "X", "Y", "Z").random()
+        val numeros: Int = (0..9999).random()
+        val primeraLetra: String = listOf("B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "V", "W", "X", "Y", "Z").random()
+        val segundaLetra: String = listOf("B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "V", "W", "X", "Y", "Z").random()
+        val terceraLetra: String = listOf("B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "V", "W", "X", "Y", "Z").random()
 
         val matriculaCompleta: String = numeros.toString() + primeraLetra + segundaLetra + terceraLetra
         val kms: Int = (0..300000).random()

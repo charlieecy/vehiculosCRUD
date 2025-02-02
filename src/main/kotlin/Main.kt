@@ -22,8 +22,9 @@ fun main() {
     val v8 = factory.vehiculoRandom()
     val v9 = factory.vehiculoRandom()
     val v10 = factory.vehiculoRandom()
+    val v11 = factory.vehiculoRandom()
 
-    //Rellenamos el array por completo (10 de tamaño máximo)
+    //Rellenamos la lista
     repository.save(v1)
     repository.save(v2)
     repository.save(v3)
@@ -34,9 +35,6 @@ fun main() {
     repository.save(v8)
     repository.save(v9)
     repository.save(v10)
-
-    println(TextColors.blue("Creamos otro vehículo con el array lleno para que se redimensione"))
-    val v11 = factory.vehiculoRandom()
     repository.save(v11)
 
     println(TextColors.blue("Imprimimos todos los vehículos"))
